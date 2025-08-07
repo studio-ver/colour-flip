@@ -1,67 +1,75 @@
 using UnityEngine;
-using DG.Tweening;
-using System.Collections;
-using System.Linq.Expressions;
-
+using StudioVer.ColorFlip;
 public class Tile : MonoBehaviour
 {
-    private bool disableInput = false;
-    private bool disableFlip = false;
-    [SerializeField] private float flipSpeed = .4f;
-    [SerializeField] private Sprite face, back, disable;
-    private Sprite lastSprite;
-    [SerializeField] private SpriteRenderer gfxRenderer;
 
-    private void Awake()
+    [SerializeField] private TileState state;
+    [SerializeField] private Color face, back, disable;
+    private TileState previousState;
+    [SerializeField] private SpriteRenderer renderer;
+
+    private void OnEnable()
     {
-        gfxRenderer.sprite = face;
+        FlipButton.OnFlip += SwitchSide;
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (disableFlip == false)
-            {
-                lastSprite = gfxRenderer.sprite;
-                gfxRenderer.sprite = disable;
-                disableFlip = true;
-            } else
-            {
-                gfxRenderer.sprite = lastSprite;
-                disableFlip = false;
-            }
-        }
+        FlipButton.OnFlip -= SwitchSide;
+    }
+
+    private void Start()
+    {
+        SetColor();
     }
 
     private void OnMouseDown()
     {
-        if (disableInput || disableFlip)
+        if (state == TileState.Disabled)
+            SetState(previousState);
+        else
+        {
+            previousState = state;
+            SetState(TileState.Disabled);
+        }
+    }
+
+    private void SwitchSide()
+    {
+        if (state == TileState.Disabled)
+        {
+            SetState(previousState);
             return;
+        }
+            
 
-        if (transform.rotation.x == 0)
-            transform.DORotateQuaternion(Quaternion.Euler(180, 0, 0), flipSpeed);
+        if (state == TileState.Face)
+            SetState(TileState.Back);
         else
-            transform.DORotateQuaternion(Quaternion.Euler(0, 0, 0), flipSpeed);
-
-        StartCoroutine(Cooldown());
-        StartCoroutine(Flip());
-
+            SetState(TileState.Face);
     }
 
-    private IEnumerator Cooldown()
+    private void SetState(TileState target)
     {
-        disableInput = true;
-        yield return new WaitForSeconds(flipSpeed);
-        disableInput = false;
+        state = target;
+        SetColor();
     }
 
-    private IEnumerator Flip()
+    private void SetColor()
     {
-        yield return new WaitForSeconds(flipSpeed * .33f);
-        if (gfxRenderer.sprite == face)
-            gfxRenderer.sprite = back;
-        else
-            gfxRenderer.sprite = face;
+        switch (state)
+        {
+            case TileState.Disabled:
+                renderer.color = disable;
+                break;
+            
+            case TileState.Face:
+                renderer.color = face;
+                break;
+
+            case TileState.Back:
+                renderer.color = back;
+                break;
+        }
     }
 }
