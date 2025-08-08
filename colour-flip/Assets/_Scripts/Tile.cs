@@ -33,11 +33,16 @@ public class Tile : MonoBehaviour
         if (state == TileState.Disabled)
         {
             SetState(previousState, linkedTiles);
+            LockManager.Instance.OnLockExit();
         }
         else
         {
+            if (LockManager.Instance.Count == 0)
+                return;
+
             previousState = state;
             SetState(TileState.Disabled, linkedTiles);
+            LockManager.Instance.OnLockEnter();
         }
     }
 
@@ -46,6 +51,7 @@ public class Tile : MonoBehaviour
         if (state == TileState.Disabled)
         {
             SetState(previousState);
+            LockManager.Instance.OnLockExit();
             return;
         }
             
@@ -59,10 +65,7 @@ public class Tile : MonoBehaviour
     public void SetState(TileState target)
     {
         if (state == target)
-        {
-            Debug.Log($"{coordinates}, is already the target state '{target}''");
             return;
-        }
 
         previousState = state;
         state = target;
