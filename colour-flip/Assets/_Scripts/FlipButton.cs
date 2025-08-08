@@ -7,13 +7,9 @@ public class FlipButton : MonoBehaviour
     
     public void Flip()
     {
-        if (TurnTracker.Instance.Count == 0)
-            return;
-
         if (OnFlip == null)
             return;
 
         OnFlip();
-        TurnTracker.Instance.NextTurn();
     }
 }

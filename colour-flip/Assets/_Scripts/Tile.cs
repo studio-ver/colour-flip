@@ -4,13 +4,14 @@ using Unity.VisualScripting;
 public class Tile : MonoBehaviour
 {
 
-    [SerializeField] private TileState state;
+    [field: SerializeField] public TileState State { get; private set; }
     [SerializeField] private Color face, back;
     private TileState previousState;
     [SerializeField] private SpriteRenderer renderer;
     [SerializeField] private Vector2 coordinates;
-
     [SerializeField] private Tile[] linkedTiles;
+    private float scaleReference;
+    private float shrinkAmount = .75f;
 
     private void OnEnable()
     {
@@ -24,39 +25,37 @@ public class Tile : MonoBehaviour
 
     private void Start()
     {
-        previousState = state;
+        GetComponent<TileProcessor>().enabled = false;
+
+        scaleReference = transform.localScale.x;
+
+        previousState = State;
         SetColor();
     }
 
     private void OnMouseDown()
     {
-        if (state == TileState.Disabled)
+        if (State == TileState.Disabled)
         {
             SetState(previousState, linkedTiles);
-            LockManager.Instance.OnLockExit();
         }
         else
         {
-            if (LockManager.Instance.Count == 0)
-                return;
-
-            previousState = state;
+            previousState = State;
             SetState(TileState.Disabled, linkedTiles);
-            LockManager.Instance.OnLockEnter();
         }
     }
 
     private void SwitchSide()
     {
-        if (state == TileState.Disabled)
+        if (State == TileState.Disabled)
         {
             SetState(previousState);
-            LockManager.Instance.OnLockExit();
             return;
         }
-            
 
-        if (state == TileState.Face)
+
+        if (State == TileState.Face)
             SetState(TileState.Back);
         else
             SetState(TileState.Face);
@@ -64,15 +63,16 @@ public class Tile : MonoBehaviour
 
     public void SetState(TileState target)
     {
-        if (state == target)
+        if (State == target)
             return;
 
-        previousState = state;
-        state = target;
-        if (state == TileState.Disabled) transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+        previousState = State;
+        State = target;
+        float shrink = scaleReference * shrinkAmount;
+        if (State == TileState.Disabled) transform.localScale = new Vector3(shrink, shrink, shrink);
         else
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            transform.localScale = new Vector3(scaleReference, scaleReference, scaleReference);
             SetColor();
         }
     }
@@ -90,9 +90,9 @@ public class Tile : MonoBehaviour
         }
     }
 
-    private void SetColor()
+    public void SetColor()
     {
-        switch (state)
+        switch (State)
         {
             case TileState.Face:
                 renderer.color = face;
@@ -107,5 +107,10 @@ public class Tile : MonoBehaviour
     public Vector2 GetCoordinates()
     {
         return coordinates;
+    }
+
+    ~Tile()
+    {
+        GetComponent<TileProcessor>().enabled = true;
     }
 }
