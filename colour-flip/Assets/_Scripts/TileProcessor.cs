@@ -1,16 +1,20 @@
 using UnityEngine;
-using StudioVer.ColorFlip;
 
 [ExecuteInEditMode]
 public class TileProcessor : MonoBehaviour
 {
-    [SerializeField] private Tile tile;
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    private Tile self;
 
-    void Update()
+    private void Awake()
     {
-        if (tile.State == TileState.Disabled) return;
+        if (self == null) self = GetComponent<Tile>();
+    }
 
-        tile.SetColor();
+    private void Update()
+    {
+        if (self == null) return;
+
+        self.MoveTo(self.Coordinate);
+        self.SetType(self.Type);
     }
 }

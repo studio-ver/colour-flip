@@ -1,116 +1,45 @@
 using UnityEngine;
-using StudioVer.ColorFlip;
-using Unity.VisualScripting;
+using Slide.Variables;
+
 public class Tile : MonoBehaviour
 {
+    [field: SerializeField] public Vector2 Coordinate { get; private set; }
+    [field: SerializeField] public TileType Type { get; private set; }
+    [SerializeField] private SpriteRenderer gfxRenderer;
 
-    [field: SerializeField] public TileState State { get; private set; }
-    [SerializeField] private Color face, back;
-    private TileState previousState;
-    [SerializeField] private SpriteRenderer renderer;
-    [SerializeField] private Vector2 coordinates;
-    [SerializeField] private Tile[] linkedTiles;
-    private float scaleReference;
-    private float shrinkAmount = .75f;
-
-    private void OnEnable()
+    private void Awake()
     {
-        FlipButton.OnFlip += SwitchSide;
+        TileProcessor processor = GetComponent<TileProcessor>();
+        if (processor != null) processor.enabled = false;
     }
 
-    private void OnDisable()
+    public void Init()
     {
-        FlipButton.OnFlip -= SwitchSide;
+        MoveTo(Coordinate);
+        SetType(Type);
     }
 
-    private void Start()
+    public void MoveTo(Vector2 coordinate)
     {
-        GetComponent<TileProcessor>().enabled = false;
-
-        scaleReference = transform.localScale.x;
-
-        previousState = State;
-        SetColor();
+        transform.position = coordinate * (transform.localScale.x + .2f);
+        Coordinate = coordinate;
     }
 
-    private void OnMouseDown()
+    public void SetType(TileType type)
     {
-        if (State == TileState.Disabled)
+        Type = type;
+
+        switch(type)
         {
-            SetState(previousState, linkedTiles);
+            case TileType.Idle: gfxRenderer.color = Color.grey; break;
+            case TileType.Red: gfxRenderer.color = Color.red; break;
+            case TileType.Blue: gfxRenderer.color = Color.cyan; break;
         }
-        else
-        {
-            previousState = State;
-            SetState(TileState.Disabled, linkedTiles);
-        }
-    }
-
-    private void SwitchSide()
-    {
-        if (State == TileState.Disabled)
-        {
-            SetState(previousState);
-            return;
-        }
-
-
-        if (State == TileState.Face)
-            SetState(TileState.Back);
-        else
-            SetState(TileState.Face);
-    }
-
-    public void SetState(TileState target)
-    {
-        if (State == target)
-            return;
-
-        previousState = State;
-        State = target;
-        float shrink = scaleReference * shrinkAmount;
-        if (State == TileState.Disabled) transform.localScale = new Vector3(shrink, shrink, shrink);
-        else
-        {
-            transform.localScale = new Vector3(scaleReference, scaleReference, scaleReference);
-            SetColor();
-        }
-    }
-
-    public void SetState(TileState target, Tile[] linkedTiles)
-    {
-        SetState(target);
-
-        if (linkedTiles.Length == 0)
-            return;
-
-        foreach (Tile tile in linkedTiles)
-        {
-            tile.SetState(target);
-        }
-    }
-
-    public void SetColor()
-    {
-        switch (State)
-        {
-            case TileState.Face:
-                renderer.color = face;
-                break;
-
-            case TileState.Back:
-                renderer.color = back;
-                break;
-        }
-    }
-
-    public Vector2 GetCoordinates()
-    {
-        return coordinates;
     }
 
     ~Tile()
     {
-        GetComponent<TileProcessor>().enabled = true;
+        TileProcessor processor = GetComponent<TileProcessor>();
+        if (processor != null) processor.enabled = true;
     }
 }
