@@ -123,12 +123,12 @@ public class Board : MonoBehaviour
 
         foreach (Tile tile in tiles)
         {
-            if (tile.Type == Slide.Variables.TileType.Idle)
-            {
-                continue;
-            }
-            
             win = IsSolved(tile);
+
+            if (win == false)
+            {
+                return;
+            }
         }
 
         if (win)
