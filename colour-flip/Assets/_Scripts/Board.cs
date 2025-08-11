@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +8,7 @@ public class Board : MonoBehaviour
     [SerializeField] private Tile[] tiles;
     [SerializeField] private GameObject solution;
     private PlayerControls playerActions;
+    private bool canMove = true;
 
     private void OnEnable()
     {
@@ -44,6 +47,10 @@ public class Board : MonoBehaviour
 
     private void MoveAll(Vector2 direction)
     {
+        if (canMove == false)
+            return;
+
+        StartCoroutine(MoveBoardAnimate(direction));
         Vector2 targetCoordinate;
 
         foreach (Tile tile in tiles)
@@ -61,8 +68,32 @@ public class Board : MonoBehaviour
         CheckSolution();
     }
 
+    private IEnumerator MoveBoardAnimate(Vector2 direction)
+    {
+        canMove = false;
+        transform.DOMove(direction * .35f, .1f);
+        yield return new WaitForSeconds(.1f);
+        transform.DOMove(Vector2.zero, .1f);
+        yield return new WaitForSeconds(.1f);
+        canMove = true;
+    }
+
+    private IEnumerator RotateBoardAnimate(Vector2 direction)
+    {
+        canMove = false;
+        transform.DORotate(direction == Vector2.right ? new Vector3(0, 0, -15) : new Vector3(0, 0, 15), .1f);
+        yield return new WaitForSeconds(.1f);
+        transform.DORotate(Vector2.zero, .1f);
+        yield return new WaitForSeconds(.1f);
+        canMove = true;
+    }
+
     private void RotateAll(Vector2 direction)
     {
+        if (canMove == false)
+            return;
+
+        StartCoroutine(RotateBoardAnimate(direction));
         foreach(Tile tile in tiles)
         {
             tile.MoveTo(GetRotatePosition(tile.Coordinate, direction));
