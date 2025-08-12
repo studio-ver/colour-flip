@@ -136,10 +136,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slideSounds:
-  - {fileID: 8300000, guid: fc8ec0a53771ccf4eb1c5daa6f81c6e8, type: 3}
+  - {fileID: 8300000, guid: bf48a8f2a6ac01f408c14372754e4f70, type: 3}
+  - {fileID: 8300000, guid: d0eb09cc5926a5242972c268def7bcd4, type: 3}
+  - {fileID: 8300000, guid: f9bb655d6e260574387818e7c0996828, type: 3}
   rotateSounds:
-  - {fileID: 8300000, guid: 795f0428df7d6e54a925f71c8515cfb2, type: 3}
-  winSound: {fileID: 8300000, guid: 734cf56648066a448b7f278d904e9bee, type: 3}
+  - {fileID: 8300000, guid: aff9b3ddc6c860b4290937fa9c04994d, type: 3}
+  - {fileID: 8300000, guid: 7ab856658da4d1a49b081110a0aacae8, type: 3}
+  winSound: {fileID: 8300000, guid: 2e3a148c58656634b9c529bac5f84165, type: 3}
+  revealSound: {fileID: 8300000, guid: 3f80d7870e15e9844bbb0e0bb74c82c5, type: 3}
+  peakEnterSound: {fileID: 8300000, guid: 795f0428df7d6e54a925f71c8515cfb2, type: 3}
+  peakExitSound: {fileID: 8300000, guid: 0c4ec52808def4b4da156d2bfceb90df, type: 3}
 --- !u!82 &5846149016986912812
 AudioSource:
   m_ObjectHideFlags: 0

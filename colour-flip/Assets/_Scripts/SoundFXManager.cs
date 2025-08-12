@@ -6,7 +6,7 @@ public class SoundFXManager : MonoBehaviour
 {
     [SerializeField] private AudioClip[] slideSounds;
     [SerializeField] private AudioClip[] rotateSounds;
-    [SerializeField] private AudioClip winSound;
+    [SerializeField] private AudioClip winSound, revealSound, peakEnterSound, peakExitSound;
     private AudioSource source;
 
     private void Awake() {
@@ -26,6 +26,24 @@ public class SoundFXManager : MonoBehaviour
     public void PlayWin()
     {
         source.clip = winSound;
+        source.Play();
+    }
+
+    public void PlayOnReveal()
+    {
+        source.clip = revealSound;
+        source.Play();
+    }
+
+    public void PlayOnPeakEnter()
+    {
+        source.clip = peakEnterSound;
+        source.Play();
+    }
+
+    public void PlayOnPeakExit()
+    {
+        source.clip = peakExitSound;
         source.Play();
     }
 }

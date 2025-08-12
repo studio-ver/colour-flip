@@ -7,24 +7,24 @@ using UnityEngine.SceneManagement;
 public class Board : MonoBehaviour
 {
     private PlayerControls playerActions;
-    private bool canMove = true;
-
+    private bool canMove = false;
     [SerializeField] private GameObject gameGrid;
     private Tile[] gameTiles;
     [SerializeField] private GameObject solutionGrid;
     private Tile[] solutionTiles;
     private bool win = false;
+    [SerializeField] private string targetScene;
 
     private void OnEnable()
     {
-        playerActions.Default.RESET.started += ResetScene;
-        playerActions.Default.NEXT.started += NextScene;
+        playerActions.Default.PEAK.started += Peak;
+        playerActions.Default.PEAK.canceled += Peak;
     }
 
     private void OnDisable()
     {
-        playerActions.Default.NEXT.started -= NextScene;
-        playerActions.Default.RESET.started -= ResetScene;
+        playerActions.Default.PEAK.canceled -= Peak;
+        playerActions.Default.PEAK.started -= Peak;
         playerActions.Disable();
     }
 
@@ -32,12 +32,48 @@ public class Board : MonoBehaviour
     {
         playerActions = new PlayerControls();
         gameTiles = gameGrid.GetComponentsInChildren<Tile>();
+        Hide(gameTiles);
         solutionTiles = solutionGrid.GetComponentsInChildren<Tile>();
     }
 
     private void Start()
     {
         playerActions.Enable();
+        StartCoroutine(ShowAfterDelay(gameTiles));
+    }
+
+    private void Hide(Tile[] tiles)
+    {
+        foreach(Tile tile in tiles)
+        {
+            tile.gameObject.SetActive(false);
+        }
+    }
+
+    private IEnumerator ShowAfterDelay(Tile[] tiles)
+    {
+        yield return new WaitForSeconds(.25f);
+        Show(tiles);
+        yield return new WaitForSeconds(tiles.Length * .3f);
+        canMove = true;
+    }
+
+    private void Show(Tile[] tiles)
+    {
+        for(int i = 0; i < tiles.Length; i++)
+        {
+            StartCoroutine(RevealAfterDelay(tiles[i], i * .3f));
+        }
+    }
+
+    private IEnumerator RevealAfterDelay(Tile tile, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        tile.gameObject.SetActive(true);
+        tile.transform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), .3f);
+        AudioManager.Sounds.PlayOnReveal();
+        yield return new WaitForSeconds(.3f);
+        tile.transform.DOScale(new Vector3(1.25f, 1.25f, 1.25f), .3f);
     }
 
     private void Update()
@@ -77,9 +113,7 @@ public class Board : MonoBehaviour
     private IEnumerator MoveBoardAnimate(Vector2 direction)
     {
         canMove = false;
-
         AudioManager.Sounds.PlaySlide();
-
         transform.DOMove(direction * .35f, .1f);
         yield return new WaitForSeconds(.1f);
         transform.DOMove(Vector2.zero, .1f);
@@ -90,9 +124,7 @@ public class Board : MonoBehaviour
     private IEnumerator RotateBoardAnimate(Vector2 direction)
     {
         canMove = false;
-
         AudioManager.Sounds.PlayRotate();
-
         transform.DORotate(direction == Vector2.right ? new Vector3(0, 0, -15) : new Vector3(0, 0, 15), .1f);
         yield return new WaitForSeconds(.1f);
         transform.DORotate(Vector2.zero, .1f);
@@ -170,7 +202,14 @@ public class Board : MonoBehaviour
         if (win)
         {
             AudioManager.Sounds.PlayWin();
+            StartCoroutine(SetupNextScene());
         }
+    }
+
+    private IEnumerator SetupNextScene()
+    {
+        yield return new WaitForSeconds(.75f);
+        SceneSwitcher.GoToNext();
     }
 
     private bool IsSolved(Tile target)
@@ -183,13 +222,27 @@ public class Board : MonoBehaviour
         return false;
     }
 
-    private void ResetScene(InputAction.CallbackContext context)
+    private void Peak(InputAction.CallbackContext context)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+        if (context.started)
+        {
+            AudioManager.Sounds.PlayOnPeakEnter();
+            foreach (Tile tile in gameTiles)
+            {
+                tile.gameObject.SetActive(false);
+            }
 
-    private void NextScene(InputAction.CallbackContext context)
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+            canMove = false;
+        }
+        else if (context.canceled)
+        {
+            foreach (Tile tile in gameTiles)
+            {
+                tile.gameObject.SetActive(true);
+            }
+            
+            AudioManager.Sounds.PlayOnPeakExit();
+            canMove = true;
+        }
     }
 }

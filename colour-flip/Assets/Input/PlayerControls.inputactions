@@ -60,18 +60,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "RESET",
+                    "name": "PEAK",
                     "type": "Button",
-                    "id": "60ef52cc-c478-45d3-8c9e-5f98c5dbdf36",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "NEXT",
-                    "type": "Button",
-                    "id": "7ae5153e-ed87-47df-b713-c5492a12f46e",
+                    "id": "7deb2464-3cd2-4549-b5c4-8cb6c119e2da",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -147,23 +138,12 @@
                 },
                 {
                     "name": "",
-                    "id": "814078ea-3eaf-4ec5-a855-a4831d4681ce",
-                    "path": "<Keyboard>/backspace",
+                    "id": "4cf36714-9bdc-4543-ab79-67f463c57437",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "RESET",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2b4f492d-9931-4641-af6d-797feb505c03",
-                    "path": "<Keyboard>/enter",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "NEXT",
+                    "action": "PEAK",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
