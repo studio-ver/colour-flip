@@ -110,6 +110,8 @@ public class Board : MonoBehaviour
         {
             tile.MoveTo(GetRotatePosition(tile.Coordinate, direction));
         }
+
+        CheckSolution();
     }
 
     private Vector2 GetRotatePosition(Vector2 startCoordinate, Vector2 direction)
@@ -167,7 +169,6 @@ public class Board : MonoBehaviour
 
         if (win)
         {
-            Debug.Log("Solved");
             AudioManager.Sounds.PlayWin();
         }
     }

@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/techDemo.unity
+    path: Assets/Scenes/puzzle1.unity
     guid: a8dff894632a1504fb7b35a81fa9aab7
   - enabled: 1
     path: Assets/Scenes/puzzle2.unity
@@ -14,6 +14,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/puzzle3.unity
     guid: 47d220e58d8efb34fad4d9ed9dcdb880
+  - enabled: 1
+    path: Assets/Scenes/puzzle4.unity
+    guid: d0294e148fc6c6b42b757241245b769e
+  - enabled: 1
+    path: Assets/Scenes/puzzle5.unity
+    guid: 12778b4e655494944b153ea57e846246
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
