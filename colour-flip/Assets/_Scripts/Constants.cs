@@ -4,7 +4,6 @@ namespace Slide
     {
         public enum TileType
         {
-            Idle,
             Red,
             Blue
         };

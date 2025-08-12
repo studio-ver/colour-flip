@@ -51,27 +51,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PEAK",
-                    "type": "Button",
-                    "id": "1833310a-0b8d-46d3-b34d-15b1e8199738",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "ROTATE_RIGHT",
                     "type": "Button",
                     "id": "f4c29c6c-b5ca-4c82-affd-a5221911baa5",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Tilt",
-                    "type": "Button",
-                    "id": "73bc2788-5c7c-467f-a122-ac13a4ef4137",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -136,34 +118,12 @@
                 },
                 {
                     "name": "",
-                    "id": "56343ae3-a907-43d4-b6a3-624febd68b73",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "PEAK",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "5e29efd2-eaa2-4913-8d3c-ac2036e75c80",
                     "path": "<Keyboard>/l",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "ROTATE_RIGHT",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7c2f7425-1b31-4d9c-8738-70362350890a",
-                    "path": "<Keyboard>/enter",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Tilt",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

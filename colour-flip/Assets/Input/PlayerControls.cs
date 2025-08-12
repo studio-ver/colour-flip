@@ -73,27 +73,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""PEAK"",
-                    ""type"": ""Button"",
-                    ""id"": ""1833310a-0b8d-46d3-b34d-15b1e8199738"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""ROTATE_RIGHT"",
                     ""type"": ""Button"",
                     ""id"": ""f4c29c6c-b5ca-4c82-affd-a5221911baa5"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Tilt"",
-                    ""type"": ""Button"",
-                    ""id"": ""73bc2788-5c7c-467f-a122-ac13a4ef4137"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -158,34 +140,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""56343ae3-a907-43d4-b6a3-624febd68b73"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PEAK"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""5e29efd2-eaa2-4913-8d3c-ac2036e75c80"",
                     ""path"": ""<Keyboard>/l"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ROTATE_RIGHT"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7c2f7425-1b31-4d9c-8738-70362350890a"",
-                    ""path"": ""<Keyboard>/enter"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Tilt"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -201,9 +161,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Default_UP = m_Default.FindAction("UP", throwIfNotFound: true);
         m_Default_DOWN = m_Default.FindAction("DOWN", throwIfNotFound: true);
         m_Default_ROTATE_LEFT = m_Default.FindAction("ROTATE_LEFT", throwIfNotFound: true);
-        m_Default_PEAK = m_Default.FindAction("PEAK", throwIfNotFound: true);
         m_Default_ROTATE_RIGHT = m_Default.FindAction("ROTATE_RIGHT", throwIfNotFound: true);
-        m_Default_Tilt = m_Default.FindAction("Tilt", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -275,9 +233,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Default_UP;
     private readonly InputAction m_Default_DOWN;
     private readonly InputAction m_Default_ROTATE_LEFT;
-    private readonly InputAction m_Default_PEAK;
     private readonly InputAction m_Default_ROTATE_RIGHT;
-    private readonly InputAction m_Default_Tilt;
     public struct DefaultActions
     {
         private @PlayerControls m_Wrapper;
@@ -287,9 +243,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @UP => m_Wrapper.m_Default_UP;
         public InputAction @DOWN => m_Wrapper.m_Default_DOWN;
         public InputAction @ROTATE_LEFT => m_Wrapper.m_Default_ROTATE_LEFT;
-        public InputAction @PEAK => m_Wrapper.m_Default_PEAK;
         public InputAction @ROTATE_RIGHT => m_Wrapper.m_Default_ROTATE_RIGHT;
-        public InputAction @Tilt => m_Wrapper.m_Default_Tilt;
         public InputActionMap Get() { return m_Wrapper.m_Default; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -314,15 +268,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @ROTATE_LEFT.started += instance.OnROTATE_LEFT;
             @ROTATE_LEFT.performed += instance.OnROTATE_LEFT;
             @ROTATE_LEFT.canceled += instance.OnROTATE_LEFT;
-            @PEAK.started += instance.OnPEAK;
-            @PEAK.performed += instance.OnPEAK;
-            @PEAK.canceled += instance.OnPEAK;
             @ROTATE_RIGHT.started += instance.OnROTATE_RIGHT;
             @ROTATE_RIGHT.performed += instance.OnROTATE_RIGHT;
             @ROTATE_RIGHT.canceled += instance.OnROTATE_RIGHT;
-            @Tilt.started += instance.OnTilt;
-            @Tilt.performed += instance.OnTilt;
-            @Tilt.canceled += instance.OnTilt;
         }
 
         private void UnregisterCallbacks(IDefaultActions instance)
@@ -342,15 +290,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @ROTATE_LEFT.started -= instance.OnROTATE_LEFT;
             @ROTATE_LEFT.performed -= instance.OnROTATE_LEFT;
             @ROTATE_LEFT.canceled -= instance.OnROTATE_LEFT;
-            @PEAK.started -= instance.OnPEAK;
-            @PEAK.performed -= instance.OnPEAK;
-            @PEAK.canceled -= instance.OnPEAK;
             @ROTATE_RIGHT.started -= instance.OnROTATE_RIGHT;
             @ROTATE_RIGHT.performed -= instance.OnROTATE_RIGHT;
             @ROTATE_RIGHT.canceled -= instance.OnROTATE_RIGHT;
-            @Tilt.started -= instance.OnTilt;
-            @Tilt.performed -= instance.OnTilt;
-            @Tilt.canceled -= instance.OnTilt;
         }
 
         public void RemoveCallbacks(IDefaultActions instance)
@@ -375,8 +317,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnUP(InputAction.CallbackContext context);
         void OnDOWN(InputAction.CallbackContext context);
         void OnROTATE_LEFT(InputAction.CallbackContext context);
-        void OnPEAK(InputAction.CallbackContext context);
         void OnROTATE_RIGHT(InputAction.CallbackContext context);
-        void OnTilt(InputAction.CallbackContext context);
     }
 }

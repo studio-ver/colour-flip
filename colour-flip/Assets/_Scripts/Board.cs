@@ -5,33 +5,29 @@ using UnityEngine.InputSystem;
 
 public class Board : MonoBehaviour
 {
-    [SerializeField] private Tile[] tiles;
-    [SerializeField] private GameObject solution;
     private PlayerControls playerActions;
     private bool canMove = true;
 
-    private void OnEnable()
-    {
-        playerActions.Default.PEAK.started += ToggleSolutionVisibility;
-        playerActions.Default.PEAK.canceled += ToggleSolutionVisibility;
-    }
+    [SerializeField] private GameObject gameGrid;
+    private Tile[] gameTiles;
+    [SerializeField] private GameObject solutionGrid;
+    private Tile[] solutionTiles;
 
     private void OnDisable()
     {
-        playerActions.Default.PEAK.started -= ToggleSolutionVisibility;
-        playerActions.Default.PEAK.canceled -= ToggleSolutionVisibility;
         playerActions.Disable();
     }
 
     private void Awake()
     {
         playerActions = new PlayerControls();
+        gameTiles = gameGrid.GetComponentsInChildren<Tile>();
+        solutionTiles = solutionGrid.GetComponentsInChildren<Tile>();
     }
 
     private void Start()
     {
         playerActions.Enable();
-        solution.SetActive(false);
     }
 
     private void Update()
@@ -53,7 +49,7 @@ public class Board : MonoBehaviour
         StartCoroutine(MoveBoardAnimate(direction));
         Vector2 targetCoordinate;
 
-        foreach (Tile tile in tiles)
+        foreach (Tile tile in gameTiles)
         {
             targetCoordinate = tile.Coordinate + direction;
 
@@ -71,6 +67,9 @@ public class Board : MonoBehaviour
     private IEnumerator MoveBoardAnimate(Vector2 direction)
     {
         canMove = false;
+
+        AudioManager.Sounds.PlaySlide();
+
         transform.DOMove(direction * .35f, .1f);
         yield return new WaitForSeconds(.1f);
         transform.DOMove(Vector2.zero, .1f);
@@ -81,6 +80,7 @@ public class Board : MonoBehaviour
     private IEnumerator RotateBoardAnimate(Vector2 direction)
     {
         canMove = false;
+
         transform.DORotate(direction == Vector2.right ? new Vector3(0, 0, -15) : new Vector3(0, 0, 15), .1f);
         yield return new WaitForSeconds(.1f);
         transform.DORotate(Vector2.zero, .1f);
@@ -94,7 +94,7 @@ public class Board : MonoBehaviour
             return;
 
         StartCoroutine(RotateBoardAnimate(direction));
-        foreach(Tile tile in tiles)
+        foreach(Tile tile in gameTiles)
         {
             tile.MoveTo(GetRotatePosition(tile.Coordinate, direction));
         }
@@ -141,18 +141,11 @@ public class Board : MonoBehaviour
         }
     }
 
-
-    private void ToggleSolutionVisibility(InputAction.CallbackContext context)
-    {
-        if (context.started) solution.SetActive(true);
-        else if (context.canceled) solution.SetActive(false);
-    }
-
     private void CheckSolution()
     {
         bool win = false;
 
-        foreach (Tile tile in tiles)
+        foreach (Tile tile in gameTiles)
         {
             win = IsSolved(tile);
 
@@ -170,7 +163,7 @@ public class Board : MonoBehaviour
 
     private bool IsSolved(Tile target)
     {
-        foreach(Tile tile in solution.GetComponentsInChildren<Tile>())
+        foreach(Tile tile in solutionTiles)
         {
             if (tile.Coordinate == target.Coordinate && tile.Type == target.Type) return true;
         }

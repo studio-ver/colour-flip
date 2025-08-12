@@ -41,8 +41,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Tile
+  - name: SolutionTile
     uniqueID: 3668224263
+    locked: 0
+  - name: GameTile
+    uniqueID: 384464179
     locked: 0
   m_RenderingLayers:
   - Default

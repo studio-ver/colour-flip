@@ -31,7 +31,6 @@ public class Tile : MonoBehaviour
 
         switch(type)
         {
-            case TileType.Idle: gfxRenderer.color = Color.grey; break;
             case TileType.Red: gfxRenderer.color = Color.red; break;
             case TileType.Blue: gfxRenderer.color = Color.cyan; break;
         }
