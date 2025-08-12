@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Board : MonoBehaviour
 {
@@ -12,9 +13,18 @@ public class Board : MonoBehaviour
     private Tile[] gameTiles;
     [SerializeField] private GameObject solutionGrid;
     private Tile[] solutionTiles;
+    private bool win = false;
+
+    private void OnEnable()
+    {
+        playerActions.Default.RESET.started += ResetScene;
+        playerActions.Default.NEXT.started += NextScene;
+    }
 
     private void OnDisable()
     {
+        playerActions.Default.NEXT.started -= NextScene;
+        playerActions.Default.RESET.started -= ResetScene;
         playerActions.Disable();
     }
 
@@ -74,18 +84,20 @@ public class Board : MonoBehaviour
         yield return new WaitForSeconds(.1f);
         transform.DOMove(Vector2.zero, .1f);
         yield return new WaitForSeconds(.1f);
-        canMove = true;
+        if (win == false) canMove = true;
     }
 
     private IEnumerator RotateBoardAnimate(Vector2 direction)
     {
         canMove = false;
 
+        AudioManager.Sounds.PlayRotate();
+
         transform.DORotate(direction == Vector2.right ? new Vector3(0, 0, -15) : new Vector3(0, 0, 15), .1f);
         yield return new WaitForSeconds(.1f);
         transform.DORotate(Vector2.zero, .1f);
         yield return new WaitForSeconds(.1f);
-        canMove = true;
+        if (win == false) canMove = true;
     }
 
     private void RotateAll(Vector2 direction)
@@ -143,8 +155,6 @@ public class Board : MonoBehaviour
 
     private void CheckSolution()
     {
-        bool win = false;
-
         foreach (Tile tile in gameTiles)
         {
             win = IsSolved(tile);
@@ -158,6 +168,7 @@ public class Board : MonoBehaviour
         if (win)
         {
             Debug.Log("Solved");
+            AudioManager.Sounds.PlayWin();
         }
     }
 
@@ -169,5 +180,15 @@ public class Board : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void ResetScene(InputAction.CallbackContext context)
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void NextScene(InputAction.CallbackContext context)
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
     }
 }

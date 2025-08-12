@@ -80,6 +80,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RESET"",
+                    ""type"": ""Button"",
+                    ""id"": ""60ef52cc-c478-45d3-8c9e-5f98c5dbdf36"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NEXT"",
+                    ""type"": ""Button"",
+                    ""id"": ""7ae5153e-ed87-47df-b713-c5492a12f46e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -148,6 +166,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""ROTATE_RIGHT"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""814078ea-3eaf-4ec5-a855-a4831d4681ce"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RESET"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b4f492d-9931-4641-af6d-797feb505c03"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NEXT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -162,6 +202,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Default_DOWN = m_Default.FindAction("DOWN", throwIfNotFound: true);
         m_Default_ROTATE_LEFT = m_Default.FindAction("ROTATE_LEFT", throwIfNotFound: true);
         m_Default_ROTATE_RIGHT = m_Default.FindAction("ROTATE_RIGHT", throwIfNotFound: true);
+        m_Default_RESET = m_Default.FindAction("RESET", throwIfNotFound: true);
+        m_Default_NEXT = m_Default.FindAction("NEXT", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -234,6 +276,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Default_DOWN;
     private readonly InputAction m_Default_ROTATE_LEFT;
     private readonly InputAction m_Default_ROTATE_RIGHT;
+    private readonly InputAction m_Default_RESET;
+    private readonly InputAction m_Default_NEXT;
     public struct DefaultActions
     {
         private @PlayerControls m_Wrapper;
@@ -244,6 +288,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @DOWN => m_Wrapper.m_Default_DOWN;
         public InputAction @ROTATE_LEFT => m_Wrapper.m_Default_ROTATE_LEFT;
         public InputAction @ROTATE_RIGHT => m_Wrapper.m_Default_ROTATE_RIGHT;
+        public InputAction @RESET => m_Wrapper.m_Default_RESET;
+        public InputAction @NEXT => m_Wrapper.m_Default_NEXT;
         public InputActionMap Get() { return m_Wrapper.m_Default; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -271,6 +317,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @ROTATE_RIGHT.started += instance.OnROTATE_RIGHT;
             @ROTATE_RIGHT.performed += instance.OnROTATE_RIGHT;
             @ROTATE_RIGHT.canceled += instance.OnROTATE_RIGHT;
+            @RESET.started += instance.OnRESET;
+            @RESET.performed += instance.OnRESET;
+            @RESET.canceled += instance.OnRESET;
+            @NEXT.started += instance.OnNEXT;
+            @NEXT.performed += instance.OnNEXT;
+            @NEXT.canceled += instance.OnNEXT;
         }
 
         private void UnregisterCallbacks(IDefaultActions instance)
@@ -293,6 +345,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @ROTATE_RIGHT.started -= instance.OnROTATE_RIGHT;
             @ROTATE_RIGHT.performed -= instance.OnROTATE_RIGHT;
             @ROTATE_RIGHT.canceled -= instance.OnROTATE_RIGHT;
+            @RESET.started -= instance.OnRESET;
+            @RESET.performed -= instance.OnRESET;
+            @RESET.canceled -= instance.OnRESET;
+            @NEXT.started -= instance.OnNEXT;
+            @NEXT.performed -= instance.OnNEXT;
+            @NEXT.canceled -= instance.OnNEXT;
         }
 
         public void RemoveCallbacks(IDefaultActions instance)
@@ -318,5 +376,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnDOWN(InputAction.CallbackContext context);
         void OnROTATE_LEFT(InputAction.CallbackContext context);
         void OnROTATE_RIGHT(InputAction.CallbackContext context);
+        void OnRESET(InputAction.CallbackContext context);
+        void OnNEXT(InputAction.CallbackContext context);
     }
 }

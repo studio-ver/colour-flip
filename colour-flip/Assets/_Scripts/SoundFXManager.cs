@@ -6,6 +6,7 @@ public class SoundFXManager : MonoBehaviour
 {
     [SerializeField] private AudioClip[] slideSounds;
     [SerializeField] private AudioClip[] rotateSounds;
+    [SerializeField] private AudioClip winSound;
     private AudioSource source;
 
     private void Awake() {
@@ -18,7 +19,13 @@ public class SoundFXManager : MonoBehaviour
     }
 
     public void PlayRotate() {
-        source.clip = slideSounds[UnityEngine.Random.Range(0, rotateSounds.Length)];
+        source.clip = rotateSounds[UnityEngine.Random.Range(0, rotateSounds.Length)];
+        source.Play();
+    }
+
+    public void PlayWin()
+    {
+        source.clip = winSound;
         source.Play();
     }
 }
