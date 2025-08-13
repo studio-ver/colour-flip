@@ -2,9 +2,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
-public class StartButton : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
+public class SceneButton : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    [SerializeField] private int index;
+    
     public void OnPointerDown(PointerEventData eventData)
     {
         GetComponent<RectTransform>().DOScale(new Vector3(.9f, .9f, .9f), .1f);
@@ -26,6 +29,6 @@ public class StartButton : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
         yield return new WaitForSeconds(.1f);
         GetComponent<RectTransform>().DOScale(new Vector3(1f, 1f, 1f), .1f);
         yield return new WaitForSeconds(.1f);
-        SceneSwitcher.GoToNext();
+        SceneManager.LoadScene(index);
     }
 }

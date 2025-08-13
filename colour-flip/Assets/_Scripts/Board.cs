@@ -229,7 +229,7 @@ public class Board : MonoBehaviour
 
         yield return new WaitForSeconds(.2f);
 
-        SceneSwitcher.GoToNext();
+        SceneSwitcher.NextAdditiveScene();
     }
 
     private bool IsSolved(Tile target)
