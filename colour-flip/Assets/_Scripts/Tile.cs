@@ -1,11 +1,20 @@
 using UnityEngine;
-using Slide.Variables;
 
 public class Tile : MonoBehaviour
 {
     [field: SerializeField] public Vector2 Coordinate { get; private set; }
     [field: SerializeField] public TileType Type { get; private set; }
     [SerializeField] private SpriteRenderer gfxRenderer;
+
+    public enum TileType
+    {
+        Yellow,
+        Green
+    };
+
+    private Color yellow = new Color(0.9137254901960784f, 0.7686274509803922f, 0.41568627450980394f);
+    private Color green = new Color(0.16470588235294117f, 0.615686274509804f, 0.5607843137254902f);
+
 
     private void Awake()
     {
@@ -21,7 +30,7 @@ public class Tile : MonoBehaviour
 
     public void MoveTo(Vector2 coordinate)
     {
-        transform.position = coordinate * (transform.localScale.x + .2f);
+        transform.position = coordinate * (transform.localScale.x + .19f);
         Coordinate = coordinate;
     }
 
@@ -31,8 +40,8 @@ public class Tile : MonoBehaviour
 
         switch(type)
         {
-            case TileType.Red: gfxRenderer.color = Color.red; break;
-            case TileType.Blue: gfxRenderer.color = Color.cyan; break;
+            case TileType.Yellow: gfxRenderer.color = yellow; break;
+            case TileType.Green: gfxRenderer.color = green; break;
         }
     }
 

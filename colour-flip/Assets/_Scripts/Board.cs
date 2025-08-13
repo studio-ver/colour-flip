@@ -1,8 +1,8 @@
 using DG.Tweening;
 using System.Collections;
+using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class Board : MonoBehaviour
 {
@@ -70,10 +70,10 @@ public class Board : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         tile.gameObject.SetActive(true);
-        tile.transform.DOScale(new Vector3(1.5f, 1.5f, 1.5f), .3f);
+        tile.transform.DOScale(new Vector3(1.1f, 1.1f, 1.1f), .3f);
         AudioManager.Sounds.PlayOnReveal();
         yield return new WaitForSeconds(.3f);
-        tile.transform.DOScale(new Vector3(1.25f, 1.25f, 1.25f), .3f);
+        tile.transform.DOScale(new Vector3(.9f, .9f, .9f), .3f);
     }
 
     private void Update()
@@ -208,7 +208,27 @@ public class Board : MonoBehaviour
 
     private IEnumerator SetupNextScene()
     {
-        yield return new WaitForSeconds(.75f);
+        foreach (Tile tile in solutionTiles)
+        {
+            tile.gameObject.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(.2f);
+
+        foreach (Tile tile in gameTiles)
+        {
+            tile.transform.DOScale(new Vector3(.4f, .4f, .4f), .3f);
+        }
+
+        yield return new WaitForSeconds(.3f);
+
+        foreach (Tile tile in gameTiles)
+        {
+            tile.gameObject.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(.2f);
+
         SceneSwitcher.GoToNext();
     }
 
@@ -224,6 +244,9 @@ public class Board : MonoBehaviour
 
     private void Peak(InputAction.CallbackContext context)
     {
+        if (win)
+            return;
+        
         if (context.started)
         {
             AudioManager.Sounds.PlayOnPeakEnter();
