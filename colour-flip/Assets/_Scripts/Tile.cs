@@ -8,12 +8,12 @@ public class Tile : MonoBehaviour
 
     public enum TileType
     {
-        Yellow,
-        Green
+        Red,
+        Blue
     };
 
-    private Color yellow = new Color(0.9137254901960784f, 0.7686274509803922f, 0.41568627450980394f);
-    private Color green = new Color(0.16470588235294117f, 0.615686274509804f, 0.5607843137254902f);
+    [SerializeField] private Color redColor;
+    [SerializeField] private Color blueColor;
 
 
     private void Awake()
@@ -40,8 +40,8 @@ public class Tile : MonoBehaviour
 
         switch(type)
         {
-            case TileType.Yellow: gfxRenderer.color = yellow; break;
-            case TileType.Green: gfxRenderer.color = green; break;
+            case TileType.Red: gfxRenderer.color = redColor; break;
+            case TileType.Blue: gfxRenderer.color = blueColor; break;
         }
     }
 

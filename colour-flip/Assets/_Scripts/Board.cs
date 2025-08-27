@@ -1,8 +1,8 @@
 using DG.Tweening;
 using System.Collections;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Board : MonoBehaviour
 {
@@ -13,7 +13,7 @@ public class Board : MonoBehaviour
     [SerializeField] private GameObject solutionGrid;
     private Tile[] solutionTiles;
     private bool win = false;
-    [SerializeField] private string targetScene;
+    private int sceneIndex = 1;
 
     private void OnEnable()
     {
@@ -34,11 +34,16 @@ public class Board : MonoBehaviour
         gameTiles = gameGrid.GetComponentsInChildren<Tile>();
         Hide(gameTiles);
         solutionTiles = solutionGrid.GetComponentsInChildren<Tile>();
+
     }
 
     private void Start()
     {
         playerActions.Enable();
+        foreach (Tile tile in solutionTiles)
+        {
+            tile.gameObject.SetActive(false);
+        }
         StartCoroutine(ShowAfterDelay(gameTiles));
     }
 
@@ -229,7 +234,8 @@ public class Board : MonoBehaviour
 
         yield return new WaitForSeconds(.2f);
 
-        SceneSwitcher.NextAdditiveScene();
+        SceneManager.UnloadSceneAsync(sceneIndex);
+        SceneManager.LoadScene(++sceneIndex, LoadSceneMode.Additive);
     }
 
     private bool IsSolved(Tile target)
@@ -255,6 +261,11 @@ public class Board : MonoBehaviour
                 tile.gameObject.SetActive(false);
             }
 
+            foreach(Tile tile in solutionTiles)
+            {
+                tile.gameObject.SetActive(true);
+            }
+
             canMove = false;
         }
         else if (context.canceled)
@@ -263,7 +274,12 @@ public class Board : MonoBehaviour
             {
                 tile.gameObject.SetActive(true);
             }
-            
+
+            foreach (Tile tile in solutionTiles)
+            {
+                tile.gameObject.SetActive(false);
+            }
+
             AudioManager.Sounds.PlayOnPeakExit();
             canMove = true;
         }
