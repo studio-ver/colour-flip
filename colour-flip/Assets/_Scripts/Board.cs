@@ -13,7 +13,6 @@ public class Board : MonoBehaviour
     [SerializeField] private GameObject solutionGrid;
     private Tile[] solutionTiles;
     private bool win = false;
-    private int sceneIndex = 1;
 
     private void OnEnable()
     {
@@ -34,7 +33,6 @@ public class Board : MonoBehaviour
         gameTiles = gameGrid.GetComponentsInChildren<Tile>();
         Hide(gameTiles);
         solutionTiles = solutionGrid.GetComponentsInChildren<Tile>();
-
     }
 
     private void Start()
@@ -234,8 +232,7 @@ public class Board : MonoBehaviour
 
         yield return new WaitForSeconds(.2f);
 
-        SceneManager.UnloadSceneAsync(sceneIndex);
-        SceneManager.LoadScene(++sceneIndex, LoadSceneMode.Additive);
+        SceneSwitcher.NextAdditiveScene();
     }
 
     private bool IsSolved(Tile target)

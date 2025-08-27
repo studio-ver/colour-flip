@@ -5,7 +5,7 @@ public class SceneSwitcher : MonoBehaviour
 {
     public static int CurrentIndex { get; private set; } = 1;
 
-    private void Awake() {
+    private void Start() {
         NextAdditiveScene();
     }
 
@@ -20,14 +20,13 @@ public class SceneSwitcher : MonoBehaviour
     }
 
     public static void NextAdditiveScene() {
-        if (SceneManager.sceneCountInBuildSettings == SceneSwitcher.CurrentIndex + 2) {
-            SceneManager.LoadScene(SceneSwitcher.CurrentIndex + 1);
-            return;
-        }
-        
         LevelIndex.SetCurrent(SceneSwitcher.CurrentIndex);
-        SceneManager.UnloadSceneAsync(SceneSwitcher.CurrentIndex);
-        SceneSwitcher.CurrentIndex++;
+        if (SceneSwitcher.CurrentIndex != 1)
+        {
+            SceneManager.UnloadSceneAsync(SceneSwitcher.CurrentIndex - 1);
+        }
+
         SceneManager.LoadScene(SceneSwitcher.CurrentIndex, LoadSceneMode.Additive);
+        SceneSwitcher.CurrentIndex++;
     }
 }
